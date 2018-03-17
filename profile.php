@@ -88,8 +88,7 @@ else{
         }
     }
     if (isset($_POST["logout"])){
-        session_destroy();
-        header ("Location: ./index.php");
+        header ("Location: ./logout.php");
     }
 
 $sql1 = "SELECT cover_pic, profile_pic FROM Nash_user where username = '".$_SESSION["username"]."';";

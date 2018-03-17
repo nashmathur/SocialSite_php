@@ -6,13 +6,35 @@
 <body>
 
 <form method="post">
-    Old password: <input type="password" name="oldpassword"><br><br>
-    New password: <input type="password" name="newpassword"><br><br>
-    Confirm New password: <input type="password" name="confpassword"><br><br>
-    <input type="submit" name="submit" value="Submit">
+    Update Personal Details:<br>
+    Name: <input type="text" name="name"><br><br>
+    Phone Number: <input type="number" name="phone"><br><br>
+    E-mail: <input type="email" name="email"><br><br>
+    Branch: <input type="text" name="branch"><br><br>
+    Interests: <input type="text" name="interests"><br><br>
+    <input type="submit" onclick="valid()" name="submit" value="Submit">
 </form>
 
 <a href="./profile.php">Go To Profile</a>
+
+<script>
+	function valid() {
+		var a = document.forms["myForm"]["name"].value;
+		if (!a.match(/[A-Z][a-zA-Z][^#&<>\"~;$^%{}?]{1,20}$/)) {
+        	alert("Enter a valid Name");
+    	}
+
+    	var c = document.forms["myForm"]["phone"].value;
+		if (!c.match(/(\+91|0)?[5-9][0-9]{9}/)) {
+        	alert("Enter a valid Mobile Number");
+    	}
+
+    	var d = document.forms["myForm"]["email"].value;
+		if (!d.match(/[a-zA-Z0-9_\.]+@[a-z]+\.[a-z]+/)) {
+        	alert("Enter a valid email-id");
+    	}
+	}
+</script>
 
 <?php 
     include ("config.php");
@@ -22,18 +44,27 @@
         header("location:./index.php");
     }
     if(isset($_POST["submit"])){
-        $sql = "SELECT password FROM Nash_user WHERE username = '".$_SESSION['username']."';";     
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        $oldpassword = md5($_POST["oldpassword"]);
-        if ($oldpassword == $row["password"] and $_POST["newpassword"] == $_POST["confpassword"] and preg_match("/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-\.\/]).{8,32}$/",$_POST["newpassword"])){
-            $newpassword = md5($_POST["newpassword"]);
-            $sql = "UPDATE Nash_user SET password = '".$newpassword."' WHERE username = '".$_SESSION["username"]."';";
+        if(preg_match("/[A-Z][a-zA-Z][^#&<>\"~;$^%{}?]{1,20}$/",$_POST["name"])){
+            $sql = "UPDATE Nash_user SET Name = '".$_POST["name"]."' WHERE username = '".$_SESSION["username"]."'";
             $conn->query($sql);
         }
-
-
-
+        if(preg_match("/(\+91|0)?[5-9][0-9]{9}/",$_POST["phone"])){
+            $sql = "UPDATE Nash_user SET phone_number = '".$_POST["phone"]."' WHERE username = '".$_SESSION["username"]."'";
+            $conn->query($sql);
+        }
+        if(preg_match("/[a-zA-Z0-9_\.]+@[a-z]+\.[a-z]+/",$_POST["email"])){
+            $sql = "UPDATE Nash_user SET email = '".$_POST["email"]."' WHERE username = '".$_SESSION["username"]."'";
+            $conn->query($sql);
+        }
+        if(preg_match("/[a-zA-Z0-9,]+/",$_POST["branch"])){
+            $sql = "UPDATE Nash_user SET branch = '".$_POST["branch"]."' WHERE username = '".$_SESSION["username"]."'";
+            $conn->query($sql);
+        }
+        if(preg_match("/[a-zA-Z0-9,]+/",$_POST["interests"])){
+            $sql = "UPDATE Nash_user SET interests = '".$_POST["interests"]."' WHERE username = '".$_SESSION["username"]."'";
+            $conn->query($sql);
+        }
+        echo ("Updated!");
     }
 ?>
 </body>

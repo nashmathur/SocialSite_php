@@ -1,6 +1,10 @@
 <?php
-  session_start();
-  if(session_destroy()) {
-    header("Location: index.php");
-  }
+session_start();
+
+session_destroy();
+
+setcookie("username","", time() - (86400  * 10));
+
+header("Location: index.php");
+exit();
 ?>
