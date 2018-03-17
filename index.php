@@ -17,7 +17,7 @@ Password: <input type="password" name="password"><br>
 include ("config.php");
 
 session_start();
-if (isset($_SESSION["id"])){
+if (isset($_SESSION["id"]) or isset($_COOKIE['username'])){
     header("Location: ./profile.php");
 }
 else{

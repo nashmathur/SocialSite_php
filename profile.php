@@ -5,7 +5,6 @@
 </head>
 <body>
 
-
 <?php        
 include ("config.php");
 session_start();
@@ -14,6 +13,15 @@ if (!isset($_SESSION)){
     header ("Location: ./index.php");
 }    
 else{
+    if(isset($_COOKIE['username'])){
+        $_SESSION['username'] = $_COOKIE['username'];
+    }
+    $sqlempty = "SELECT * FROM Nash_user WHERE username='".$_SESSION['username']."';";
+    $result = $conn->query($sqlempty);
+    $row = $result->fetch_assoc();
+    if(empty($row['branch']) and empty($row['interests'])){
+        header ("Location: ./updateprofile.php"); 
+    }
     if (isset($_POST["AddProfilePic"])){
         $target_dir = "uploads/";
         $target_file = $target_dir . basename($_FILES["fileToUpload1"]["name"]);
